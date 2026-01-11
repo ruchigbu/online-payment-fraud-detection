@@ -1,0 +1,8 @@
+Django==6.0
+pathlib
+pandas
+scikit-learn
+joblib
+DecisionTreeClassifier
+preprocessing
+numpy

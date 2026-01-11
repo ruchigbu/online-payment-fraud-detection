@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Online Fraud Detection</title>
+</head>
+<body>
+    <h1>Online Fraud Detection</h1>
+    <form id="fraudForm">
+        {% csrf_token %}
+        <!-- Include other input fields as needed -->
+        
+
+        <label for="type">Transaction Type:</label>
+        <input type="number" name="type" required>
+
+        <label for="amount">Amount:</label>
+        <input type="number" name="amount" required>
+                  
+
+        <label for="oldbalanceOrg">Old balance of Originate:</label>
+        <input type="number" name="oldbalanceOrg" required>
+
+        <label for="newbalanceOrig">New balance of Originate:</label>
+        <input type="number" name="newbalanceOrig" required>
+
+        <label for="oldbalanceDest">Old balance of Destination:</label>
+        <input type="number" name="oldbalanceDest" required>
+
+        <label for="newbalanceDest">New balance of Destination:</label>
+        <input type="number" name="newbalanceDest" required>
+                
+
+        <!-- Add more input fields based on your dataset -->
+
+        <button type="button" onclick="detectFraud()">Detect Fraud</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        function detectFraud() {
+            var form = document.getElementById('fraudForm');
+            var formData = new FormData(form);
+
+            var csrfToken = getCookie('csrftoken');
+
+            fetch('/detect_fraud/', {
+                method: 'POST',
+                headers: {
+                'X-CSRFToken': csrfToken
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerHTML = data.is_fraud ? 'Fraud Detected!' : 'No Fraud Detected';
+            })
+            .catch(error => console.error('Error:', error));
+        }
+        function getCookie(name) {
+        var value = "; " + document.cookie;
+        var parts = value.split("; " + name + "=");
+        if (parts.length == 2) return parts.pop().split(";").shift();
+        }
+    </script>
+</body>
+</html>
